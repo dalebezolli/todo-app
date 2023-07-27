@@ -5,8 +5,17 @@
         <content>
             <List id="list" items="{path: '/TodoList'}">
                 <items>
-                    <StandardListItem title="{name}" />
+                    <StandardListItem title="{name}" type="Active" press=".displayDetails" />
                 </items>
+            </List>
+
+            <List id="details">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="List Details" />
+                    </OverflowToolbar>
+                </headerToolbar>
+                <items />
             </List>
         </content>
     </Page>

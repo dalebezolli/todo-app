@@ -77,13 +77,6 @@
           "autoExpandSelect": true,
           "earlyRequests": true
         }
-      }, 
-      "kati": {
-        "type": "sap.ui.model.odata.v4.ODataModel",
-        "settings": {
-          "serviceUrl": "/odata/v4/catalog/",
-          "autoExpandSelect": true
-        }
       }
     },
     "resources": {

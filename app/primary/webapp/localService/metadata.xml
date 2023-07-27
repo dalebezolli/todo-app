@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="CatalogService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Todo" EntityType="CatalogService.Todo">
+                    <NavigationPropertyBinding Path="list" Target="TodoList"/>
+                </EntitySet>
+                <EntitySet Name="TodoList" EntityType="CatalogService.TodoList">
+                    <NavigationPropertyBinding Path="children" Target="Todo"/>
+                </EntitySet>
+            </EntityContainer>
+            <EntityType Name="Todo">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="text" Type="Edm.String" MaxLength="100"/>
+                <Property Name="completed" Type="Edm.Boolean"/>
+                <NavigationProperty Name="list" Type="CatalogService.TodoList" Partner="children">
+                    <ReferentialConstraint Property="list_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="list_ID" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="TodoList">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="80"/>
+                <NavigationProperty Name="children" Type="Collection(CatalogService.Todo)" Partner="list"/>
+            </EntityType>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

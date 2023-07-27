@@ -1,0 +1,10 @@
+sap.ui.define([
+	"sap/ui/core/mvc/Controller"
+], function (BaseController) {
+	"use strict";
+
+	return BaseController.extend("com.bezolli.primary.controller.App", {
+		onInit() { }
+	});
+}
+);

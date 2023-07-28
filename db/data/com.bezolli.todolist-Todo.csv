@@ -2,6 +2,6 @@ ID,text,completed,list_ID
 1,Item A,false,1
 2,Item B,false,2
 3,Item C,false,1
-4,Item D,false,2
-5,Item E,false,1
-6,Item F,false,1
+4,Item D,true,2
+5,Item E,true,1
+6,Item F,true,1

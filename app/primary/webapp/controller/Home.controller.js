@@ -16,7 +16,6 @@ sap.ui.define([
                     const oTodoListDetails = mTodoListDetails.get(oData.list_ID) || { total: 0, complete: 0 };
                     oTodoListDetails.total++;
                     if(oData.completed) oTodoListDetails.complete++;
-                    console.log(oData.completed);
                     mTodoListDetails.set(oData.list_ID, oTodoListDetails);
 
                 }
@@ -24,9 +23,8 @@ sap.ui.define([
                 this.byId("list").getAggregation("content").forEach(function(item) {
                     const todoListId = item.getBindingContext().getProperty("ID");
                     const currentTodoListDetails = mTodoListDetails.get(todoListId);
-                    console.log(item.setSubheader(`Total - ${currentTodoListDetails.total}\nComplete - ${currentTodoListDetails.complete}`));
+                    item.setSubheader(`Total - ${currentTodoListDetails.total}\nComplete - ${currentTodoListDetails.complete}`);
                 });
-                console.log(mTodoListDetails);
             }.bind(this));
         },
         displayDetails: function(oEvent) {

@@ -13,10 +13,11 @@ sap.ui.define([
                 const mTodoListDetails = this._calculateTodoListDetails(aTodos);
 
                 const oTileListContent = this.byId("list").getAggregation("content");
-                for(oTile of oTileListContent) {
-                    const todoListId = item.getBindingContext().getProperty("ID");
+                for(const oTile of oTileListContent) {
+                    const todoListId = oTile.getBindingContext().getProperty("ID");
                     const oCurrentTodoListDetails = mTodoListDetails.get(todoListId);
-                    item.setSubheader(`Total - ${oCurrentTodoListDetails.total}\nComplete - ${oCurrentTodoListDetails.complete}`);
+
+                    oTile.setSubheader(`Total - ${oCurrentTodoListDetails.total}\nComplete - ${oCurrentTodoListDetails.complete}`);
                 }
             }.bind(this));
         },

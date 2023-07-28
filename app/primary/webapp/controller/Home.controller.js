@@ -9,22 +9,15 @@ sap.ui.define([
     return Controller.extend("com.bezolli.primary.controller.Home", {
         onInit: function() {
             this.getOwnerComponent().getModel().bindList("/Todo", null, null).requestContexts().then(function(aContexts) {
-                const aData = aContexts.map(oContext => oContext.getObject());
+                const aTodos = aContexts.map(oContext => oContext.getObject());
+                const mTodoListDetails = this._calculateTodoListDetails(aTodos);
 
-                const mTodoListDetails = new Map();
-                for(const oData of aData) {
-                    const oTodoListDetails = mTodoListDetails.get(oData.list_ID) || { total: 0, complete: 0 };
-                    oTodoListDetails.total++;
-                    if(oData.completed) oTodoListDetails.complete++;
-                    mTodoListDetails.set(oData.list_ID, oTodoListDetails);
-
-                }
-
-                this.byId("list").getAggregation("content").forEach(function(item) {
+                const oTileListContent = this.byId("list").getAggregation("content");
+                for(oTile of oTileListContent) {
                     const todoListId = item.getBindingContext().getProperty("ID");
-                    const currentTodoListDetails = mTodoListDetails.get(todoListId);
-                    item.setSubheader(`Total - ${currentTodoListDetails.total}\nComplete - ${currentTodoListDetails.complete}`);
-                });
+                    const oCurrentTodoListDetails = mTodoListDetails.get(todoListId);
+                    item.setSubheader(`Total - ${oCurrentTodoListDetails.total}\nComplete - ${oCurrentTodoListDetails.complete}`);
+                }
             }.bind(this));
         },
         displayDetails: function(oEvent) {
@@ -39,6 +32,19 @@ sap.ui.define([
                 filters: new Filter("list_ID", FilterOperator.EQ, todoListId),
                 template: new StandardListItem({ title: "{text}" })
             });
+        },
+        _calculateTodoListDetails: function(aTodos) {
+            const mTodoListDetails = new Map();
+            for(const oData of aTodos) {
+                const oTodoListDetails = mTodoListDetails.get(oData.list_ID) || { total: 0, complete: 0 };
+
+                oTodoListDetails.total++;
+                if(oData.completed) oTodoListDetails.complete++;
+
+                mTodoListDetails.set(oData.list_ID, oTodoListDetails);
+            }
+
+            return mTodoListDetails;
         }
     });
 });

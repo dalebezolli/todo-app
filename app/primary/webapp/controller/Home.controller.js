@@ -3,7 +3,8 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/m/StandardListItem",
-], function (Controller, Filter, FilterOperator, StandardListItem) {
+    "sap/m/SplitAppMode",
+], function (Controller, Filter, FilterOperator, StandardListItem, SplitAppMode) {
     "use strict";
 
     return Controller.extend("com.bezolli.primary.controller.Home", {
@@ -22,7 +23,8 @@ sap.ui.define([
             }.bind(this));
         },
         displayDetails: function(oEvent) {
-            const oDetails = this.getView().byId("details");            
+            const oSplitContainer = this.getView().byId("container");
+            const oDetails = this.getView().byId("details");
 
             // Find the todolist id
             const todoListId = oEvent.getSource().getBindingContext().getProperty("ID");
@@ -33,6 +35,8 @@ sap.ui.define([
                 filters: new Filter("list_ID", FilterOperator.EQ, todoListId),
                 template: new StandardListItem({ title: "{text}" })
             });
+
+            oSplitContainer.setMode(SplitAppMode.ShowHideMode);
         },
         _calculateTodoListDetails: function(aTodos) {
             const mTodoListDetails = new Map();

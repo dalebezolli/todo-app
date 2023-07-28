@@ -11,18 +11,7 @@ sap.ui.define([
 
     return Controller.extend("com.bezolli.primary.controller.Home", {
         onInit: function() {
-            this.getOwnerComponent().getModel().bindList("/Todo", null, null).requestContexts().then(function(aContexts) {
-                const aTodos = aContexts.map(oContext => oContext.getObject());
-                const mTodoListDetails = this._calculateTodoListDetails(aTodos);
-
-                const oTileListContent = this.byId("list").getAggregation("content");
-                for(const oTile of oTileListContent) {
-                    const todoListId = oTile.getBindingContext().getProperty("ID");
-                    const oCurrentTodoListDetails = mTodoListDetails.get(todoListId);
-
-                    oTile.setSubheader(`Total - ${oCurrentTodoListDetails.total}\nComplete - ${oCurrentTodoListDetails.complete}`);
-                }
-            }.bind(this));
+            this.updateTodoListDetails();
         },
         displayDetails: function(oEvent) {
             const oDetails = this.getView().byId("details");
@@ -35,7 +24,7 @@ sap.ui.define([
                 filters: new Filter("list_ID", FilterOperator.EQ, oTodoList.getProperty("ID")),
                 template: new CustomListItem({ 
                     content: [
-                        new CheckBox({ selected: "{completed}" }),
+                        new CheckBox({ selected: "{completed}", select: function() { this.updateTodoListDetails() }.bind(this) }),
                         oTextObject
                     ]
                 })
@@ -45,18 +34,27 @@ sap.ui.define([
             oSplitContainer.setMode(SplitAppMode.ShowHideMode);
             this.getView().byId("detailsTitle").setText(oTodoList.getProperty("name"));
         },
-        _calculateTodoListDetails: function(aTodos) {
-            const mTodoListDetails = new Map();
-            for(const oData of aTodos) {
-                const oTodoListDetails = mTodoListDetails.get(oData.list_ID) || { total: 0, complete: 0 };
+        updateTodoListDetails: function() {
+            this.getOwnerComponent().getModel().bindList("/Todo", null, null).requestContexts().then(function(aContexts) {
+                const aTodos = aContexts.map(oContext => oContext.getObject());
+                const mTodoListDetails = new Map();
+                for(const oData of aTodos) {
+                    const oTodoListDetails = mTodoListDetails.get(oData.list_ID) || { total: 0, complete: 0 };
 
-                oTodoListDetails.total++;
-                if(oData.completed) oTodoListDetails.complete++;
+                    oTodoListDetails.total++;
+                    if(oData.completed) oTodoListDetails.complete++;
 
-                mTodoListDetails.set(oData.list_ID, oTodoListDetails);
-            }
+                    mTodoListDetails.set(oData.list_ID, oTodoListDetails);
+                }
 
-            return mTodoListDetails;
+                const oTileListContent = this.byId("list").getAggregation("content");
+                for(const oTile of oTileListContent) {
+                    const todoListId = oTile.getBindingContext().getProperty("ID");
+                    const oCurrentTodoListDetails = mTodoListDetails.get(todoListId);
+
+                    oTile.setSubheader(`Total - ${oCurrentTodoListDetails.total}\nComplete - ${oCurrentTodoListDetails.complete}`);
+                }
+            }.bind(this));
         }
     });
 });

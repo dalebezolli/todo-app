@@ -21,10 +21,10 @@ sap.ui.define([
 
                 }
 
-                this.byId("list").getAggregation("items").forEach(function(item) {
+                this.byId("list").getAggregation("content").forEach(function(item) {
                     const todoListId = item.getBindingContext().getProperty("ID");
                     const currentTodoListDetails = mTodoListDetails.get(todoListId);
-                    console.log(item.setDescription(`Total - ${currentTodoListDetails.total} Complete - ${currentTodoListDetails.complete}`));
+                    console.log(item.setSubheader(`Total - ${currentTodoListDetails.total}\nComplete - ${currentTodoListDetails.complete}`));
                 });
                 console.log(mTodoListDetails);
             }.bind(this));

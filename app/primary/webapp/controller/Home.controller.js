@@ -2,9 +2,11 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "sap/m/StandardListItem",
+    "sap/m/CustomListItem",
+    "sap/m/Text",
+    "sap/m/CheckBox",
     "sap/m/SplitAppMode",
-], function (Controller, Filter, FilterOperator, StandardListItem, SplitAppMode) {
+], function (Controller, Filter, FilterOperator, CustomListItem, Text, CheckBox, SplitAppMode) {
     "use strict";
 
     return Controller.extend("com.bezolli.primary.controller.Home", {
@@ -24,13 +26,19 @@ sap.ui.define([
         },
         displayDetails: function(oEvent) {
             const oDetails = this.getView().byId("details");
-
             const oTodoList = oEvent.getSource().getBindingContext();
+            const oTextObject = new Text({ text: "{text}" });
+            oTextObject.addStyleClass("sapUiTinyMargin");
 
             oDetails.bindAggregation("items", {
                 path: "/Todo",
                 filters: new Filter("list_ID", FilterOperator.EQ, oTodoList.getProperty("ID")),
-                template: new StandardListItem({ title: "{text}" })
+                template: new CustomListItem({ 
+                    content: [
+                        new CheckBox({ selected: "{completed}" }),
+                        oTextObject
+                    ]
+                })
             });
 
             const oSplitContainer = this.getView().byId("container");

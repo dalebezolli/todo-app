@@ -23,20 +23,19 @@ sap.ui.define([
             }.bind(this));
         },
         displayDetails: function(oEvent) {
-            const oSplitContainer = this.getView().byId("container");
             const oDetails = this.getView().byId("details");
 
-            // Find the todolist id
-            const todoListId = oEvent.getSource().getBindingContext().getProperty("ID");
+            const oTodoList = oEvent.getSource().getBindingContext();
 
-            // Bind the todolist elements to a list
             oDetails.bindAggregation("items", {
                 path: "/Todo",
-                filters: new Filter("list_ID", FilterOperator.EQ, todoListId),
+                filters: new Filter("list_ID", FilterOperator.EQ, oTodoList.getProperty("ID")),
                 template: new StandardListItem({ title: "{text}" })
             });
 
+            const oSplitContainer = this.getView().byId("container");
             oSplitContainer.setMode(SplitAppMode.ShowHideMode);
+            this.getView().byId("detailsTitle").setText(oTodoList.getProperty("name"));
         },
         _calculateTodoListDetails: function(aTodos) {
             const mTodoListDetails = new Map();

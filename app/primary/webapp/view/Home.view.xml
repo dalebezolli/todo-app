@@ -10,7 +10,7 @@
                     <List id="details">
                         <headerToolbar>
                             <OverflowToolbar>
-                                <Title text="List Details" />
+                                <Title id="detailsTitle" text="List Details" />
                             </OverflowToolbar>
                         </headerToolbar>
                         <items />

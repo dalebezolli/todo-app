@@ -2,11 +2,12 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "sap/m/CustomListItem",
+    "sap/m/ColumnListItem",
     "sap/m/Text",
     "sap/m/CheckBox",
+    "sap/m/FlexBox",
     "sap/m/SplitAppMode",
-], function (Controller, Filter, FilterOperator, CustomListItem, Text, CheckBox, SplitAppMode) {
+], function (Controller, Filter, FilterOperator, ColumnListItem, Text, CheckBox, FlexBox, SplitAppMode) {
     "use strict";
 
     return Controller.extend("com.bezolli.primary.controller.Home", {
@@ -22,11 +23,12 @@ sap.ui.define([
             oDetails.bindAggregation("items", {
                 path: "/Todo",
                 filters: new Filter("list_ID", FilterOperator.EQ, oTodoList.getProperty("ID")),
-                template: new CustomListItem({ 
-                    content: [
-                        new CheckBox({ selected: "{completed}", select: function() { this.updateTodoListDetails() }.bind(this) }),
-                        oTextObject
-                    ]
+                template: new ColumnListItem({ 
+                cells: [
+                    new CheckBox({ selected: "{completed}", select: function() { this.updateTodoListDetails() }.bind(this) }),
+                    oTextObject,
+                    new Text({ text: "Test" }),
+                ]
                 })
             });
 

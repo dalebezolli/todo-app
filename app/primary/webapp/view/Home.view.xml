@@ -6,20 +6,41 @@
     displayBlock="true">
         <SplitContainer id="container" mode="HideMode">
             <masterPages>
-                <Page showHeader="false" backgroundDesign="List">
-                    <List id="details">
-                        <headerToolbar>
-                            <OverflowToolbar>
-                                <Title id="detailsTitle" text="List Details" />
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <items />
-                    </List>
+                <Page showHeader="true" backgroundDesign="List">
+                    <customHeader>
+                        <OverflowToolbar>
+                            <Title id="detailsTitle" text="List Details" />
+                            <ToolbarSpacer />
+                            <Button icon="sap-icon://add" text="New Todo" type="Transparent" />
+                            <OverflowToolbarButton icon="sap-icon://edit" text="Edit" type="Transparent">
+                                <layoutData>
+                                    <OverflowToolbarLayoutData priority="AlwaysOverflow" />
+                                </layoutData>
+                            </OverflowToolbarButton>
+
+                            <OverflowToolbarButton icon="sap-icon://delete" text="Delete" type="Transparent">
+                                <layoutData>
+                                    <OverflowToolbarLayoutData priority="AlwaysOverflow" />
+                                </layoutData>
+                            </OverflowToolbarButton>
+                        </OverflowToolbar>
+                    </customHeader>                   
+
+                    <Table id="details">
+                        <columns>
+                            <Column width="3rem" />
+                            <Column/>
+                            <Column hAlign="End"/>
+                        </columns>
+                        <items/>
+                    </Table>
                 </Page>
             </masterPages>
             <detailPages>
                 <Page showHeader="false">
                     <content>
+                        <Button text="New List" icon="sap-icon://add" type="Emphasized" class="sapUiMediumMarginBegin sapUiTinyMarginTop" />
+
                         <Panel id="list" content="{/TodoList}" backgroundDesign="Transparent">
                             <content>
                                 <GenericTile header="{name}" press=".displayDetails" class="sapUiSmallMargin" />

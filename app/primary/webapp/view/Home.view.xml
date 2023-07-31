@@ -18,7 +18,7 @@
                                 </layoutData>
                             </OverflowToolbarButton>
 
-                            <OverflowToolbarButton icon="sap-icon://delete" text="Delete" type="Transparent">
+                            <OverflowToolbarButton icon="sap-icon://delete" text="Delete" type="Transparent" press=".onDeleteTodoList">
                                 <layoutData>
                                     <OverflowToolbarLayoutData priority="AlwaysOverflow" />
                                 </layoutData>
@@ -30,7 +30,8 @@
                         <columns>
                             <Column width="3rem" />
                             <Column/>
-                            <Column hAlign="End"/>
+                            <Column width="2.6rem" hAlign="End"/>
+                            <Column width="2.7rem" hAlign="End"/>
                         </columns>
                         <items/>
                     </Table>

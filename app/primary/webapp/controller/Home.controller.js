@@ -5,9 +5,10 @@ sap.ui.define([
     "sap/ui/model/FilterOperator",
     "sap/m/ColumnListItem",
     "sap/m/Text",
+    "sap/m/Button",
     "sap/m/CheckBox",
     "sap/m/SplitAppMode",
-], function (Controller, JSONModel, Filter, FilterOperator, ColumnListItem, Text, CheckBox, SplitAppMode) {
+], function (Controller, JSONModel, Filter, FilterOperator, ColumnListItem, Text, Button, CheckBox, SplitAppMode) {
     "use strict";
 
     return Controller.extend("com.bezolli.primary.controller.Home", {
@@ -31,7 +32,8 @@ sap.ui.define([
                 cells: [
                     new CheckBox({ selected: "{completed}", select: function() { this.updateTodoListDetails() }.bind(this) }),
                     oTextObject,
-                    new Text({ text: "Test" }),
+                    new Button({ icon: "sap-icon://edit", type: "Transparent" }),
+                    new Button({ icon: "sap-icon://delete", type: "Transparent", press: this.onDeleteTodoItem })
                 ]
                 })
             });
@@ -43,7 +45,7 @@ sap.ui.define([
                 const oTodoList = aTodoLists.reduce((accumulator, current) => (!accumulator || accumulator.ID !== iTodoListId) ? current : accumulator);
                 
                 this.getView().byId("detailsTitle").setText(oTodoList.name);
-            })
+            }.bind(this));
 
             this.getView().getModel("state").setProperty("/selectedList", iTodoListId);
         },
@@ -99,6 +101,13 @@ sap.ui.define([
         onDisplayTodoListDetails: function(oEvent) {
             const iTodoListId = oEvent.getSource().getBindingContext().getProperty("ID");
             this.displayTodoListDetails(iTodoListId);
+        },
+        onDeleteTodoList: function() {
+            const iTodoListId = this.getView().getModel("state").getProperty("/selectedList");
+            this.getOwnerComponent().getModel().delete(`/TodoList(${iTodoListId})`);
+        },
+        onDeleteTodoItem: function(oEvent) {
+            oEvent.getSource().getParent().getBindingContext().delete();
         }
     });
 });

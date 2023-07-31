@@ -11,7 +11,7 @@
                         <OverflowToolbar>
                             <Title id="detailsTitle" text="List Details" />
                             <ToolbarSpacer />
-                            <Button icon="sap-icon://add" text="New Todo" type="Transparent" />
+                            <Button icon="sap-icon://add" text="New Todo" type="Transparent" press=".onCreateTodo" />
                             <OverflowToolbarButton icon="sap-icon://edit" text="Edit" type="Transparent">
                                 <layoutData>
                                     <OverflowToolbarLayoutData priority="AlwaysOverflow" />
@@ -36,14 +36,20 @@
                     </Table>
                 </Page>
             </masterPages>
+
             <detailPages>
                 <Page showHeader="false">
                     <content>
-                        <Button text="New List" icon="sap-icon://add" type="Emphasized" class="sapUiMediumMarginBegin sapUiTinyMarginTop" />
+                        <Button 
+                            text="New List" 
+                            icon="sap-icon://add" 
+                            type="Emphasized" 
+                            class="sapUiMediumMarginBegin sapUiTinyMarginTop" 
+                            press=".onCreateList" />
 
                         <Panel id="list" content="{/TodoList}" backgroundDesign="Transparent">
                             <content>
-                                <GenericTile header="{name}" press=".displayDetails" class="sapUiSmallMargin" />
+                                <GenericTile header="{name}" press=".onDisplayTodoListDetails" class="sapUiSmallMargin" />
                             </content>
                         </Panel>
                     </content>

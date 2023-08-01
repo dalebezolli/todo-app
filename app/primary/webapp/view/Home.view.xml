@@ -9,21 +9,27 @@
                 <Page showHeader="true" backgroundDesign="List">
                     <customHeader>
                         <OverflowToolbar>
+
                             <Title id="detailsTitle" text="List Details" visible="true" />
-                            <Input id="detailsTitleInput" width="80%" value="List Details" placeholder="List Name" visible="false" />
+                            <Input 
+                                id="detailsTitleInput" width="80%" visible="false"
+                                value="List Details" valueLiveUpdate="false" placeholder="List Name"  
+                                submit=".onDisableEditTodoListName" />
+
                             <ToolbarSpacer />
+
                             <Button icon="sap-icon://add" text="New Todo" type="Transparent" press=".onCreateTodo" />
-                            <OverflowToolbarButton icon="sap-icon://edit" text="Edit" type="Transparent">
+                            <OverflowToolbarButton icon="sap-icon://edit" text="Edit" type="Transparent" press=".onEnableEditTodoListName">
                                 <layoutData>
                                     <OverflowToolbarLayoutData priority="AlwaysOverflow" />
                                 </layoutData>
                             </OverflowToolbarButton>
-
                             <OverflowToolbarButton icon="sap-icon://delete" text="Delete" type="Transparent" press=".onDeleteTodoList">
                                 <layoutData>
                                     <OverflowToolbarLayoutData priority="AlwaysOverflow" />
                                 </layoutData>
                             </OverflowToolbarButton>
+
                         </OverflowToolbar>
                     </customHeader>                   
 

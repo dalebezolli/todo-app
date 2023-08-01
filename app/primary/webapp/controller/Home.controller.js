@@ -45,7 +45,13 @@ sap.ui.define([
         },
         displayTodoListName: function(iTodoListId) {
             const oTitleControl = this.getView().byId("detailsTitle");
-            oTitleControl.bindProperty("text", { path: `/TodoList(${ iTodoListId })/name` });
+            const oTitleInputControl = this.getView().byId("detailsTitleInput");
+
+            oTitleControl.bindElement({ path: `/TodoList(${ iTodoListId })` });
+            oTitleControl.bindProperty("text", { path: `name` });
+
+            oTitleInputControl.bindElement({ path: `/TodoList(${ iTodoListId })` });
+            oTitleInputControl.bindProperty("value", { path: `name` });
         },
         updateTodoListDetails: function() {
             this.getOwnerComponent().getModel().bindList("/Todo", null, null).requestContexts().then(function(aContexts) {
@@ -102,8 +108,32 @@ sap.ui.define([
             this.displayTodoListDetails(iTodoListId);
             this.displayTodoListName(iTodoListId);
         },
-        onEditTodoListName: function() {
-            
+        onEnableEditTodoListName: function() {
+            const oTitleControl = this.getView().byId("detailsTitle");
+            const oTitleInputControl = this.getView().byId("detailsTitleInput");
+
+            oTitleControl.setVisible(false);
+            oTitleInputControl.setVisible(true);
+        },
+        onDisableEditTodoListName: function() {
+            const oTitleControl = this.getView().byId("detailsTitle");
+            const oTitleInputControl = this.getView().byId("detailsTitleInput");
+            const iTodoListId = this.getView().getModel("state").getProperty("/selectedList");
+
+            // TODO: find a way to work with the binding and not around it
+            oTitleControl.setText(oTitleInputControl.getValue());
+            const oTileListContent = this.byId("list").getAggregation("content");
+            for(const oTile of oTileListContent) {
+                const iCurrentTodoListId = oTile.getBindingContext().getProperty("ID");
+                if(iCurrentTodoListId !== iTodoListId) {
+                    continue;
+                }
+
+                oTile.setHeader(oTitleInputControl.getValue());
+            }
+
+            oTitleControl.setVisible(true);
+            oTitleInputControl.setVisible(false);
         },
         onDeleteTodoList: function() {
             const iTodoListId = this.getView().getModel("state").getProperty("/selectedList");

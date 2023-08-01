@@ -21,6 +21,8 @@ sap.ui.define([
             this.updateTodoListDetails();
         },
         displayTodoListDetails: function(iTodoListId) {
+            this.getView().getModel("state").setProperty("/selectedList", iTodoListId);
+
             const oDetails = this.getView().byId("details");
             const oTextObject = new Text({ text: "{text}" });
             oTextObject.addStyleClass("sapUiTinyMargin");
@@ -40,14 +42,10 @@ sap.ui.define([
 
             const oSplitContainer = this.getView().byId("container");
             oSplitContainer.setMode(SplitAppMode.ShowHideMode);
-            this.getOwnerComponent().getModel().bindList("/TodoList").requestContexts().then(function(aContexts) {
-                const aTodoLists = aContexts.map(oContext => oContext.getObject());
-                const oTodoList = aTodoLists.reduce((accumulator, current) => (!accumulator || accumulator.ID !== iTodoListId) ? current : accumulator);
-                
-                this.getView().byId("detailsTitle").setText(oTodoList.name);
-            }.bind(this));
-
-            this.getView().getModel("state").setProperty("/selectedList", iTodoListId);
+        },
+        displayTodoListName: function(iTodoListId) {
+            const oTitleControl = this.getView().byId("detailsTitle");
+            oTitleControl.bindProperty("text", { path: `/TodoList(${ iTodoListId })/name` });
         },
         updateTodoListDetails: function() {
             this.getOwnerComponent().getModel().bindList("/Todo", null, null).requestContexts().then(function(aContexts) {
@@ -95,12 +93,17 @@ sap.ui.define([
                 });
 
                 this.displayTodoListDetails(iSelectedListID);
+                this.displayTodoListName(iSelectedListID);
                 this.updateTodoListDetails();
             }.bind(this));
         },
         onDisplayTodoListDetails: function(oEvent) {
             const iTodoListId = oEvent.getSource().getBindingContext().getProperty("ID");
             this.displayTodoListDetails(iTodoListId);
+            this.displayTodoListName(iTodoListId);
+        },
+        onEditTodoListName: function() {
+            
         },
         onDeleteTodoList: function() {
             const iTodoListId = this.getView().getModel("state").getProperty("/selectedList");

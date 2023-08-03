@@ -5,10 +5,11 @@ sap.ui.define([
     "sap/ui/model/FilterOperator",
     "sap/m/ColumnListItem",
     "sap/m/Text",
+    "sap/m/Input",
     "sap/m/Button",
     "sap/m/CheckBox",
     "sap/m/SplitAppMode",
-], function (Controller, JSONModel, Filter, FilterOperator, ColumnListItem, Text, Button, CheckBox, SplitAppMode) {
+], function (Controller, JSONModel, Filter, FilterOperator, ColumnListItem, Text, Input, Button, CheckBox, SplitAppMode) {
     "use strict";
 
     return Controller.extend("com.bezolli.primary.controller.Home", {
@@ -24,8 +25,6 @@ sap.ui.define([
             this.getView().getModel("state").setProperty("/selectedList", iTodoListId);
 
             const oDetails = this.getView().byId("details");
-            const oTextObject = new Text({ text: "{text}" });
-            oTextObject.addStyleClass("sapUiTinyMargin");
 
             oDetails.bindAggregation("items", {
                 path: "/Todo",
@@ -33,8 +32,8 @@ sap.ui.define([
                 template: new ColumnListItem({ 
                 cells: [
                     new CheckBox({ selected: "{completed}", select: function() { this.updateTodoListDetails() }.bind(this) }),
-                    oTextObject,
-                    new Button({ icon: "sap-icon://edit", type: "Transparent" }),
+                    new Text({ text: "{text}", visible: true }),
+                    new Button({ icon: "sap-icon://edit", type: "Transparent", press: this.onEnableEditTodoName.bind(this) }),
                     new Button({ icon: "sap-icon://delete", type: "Transparent", press: this.onDeleteTodoItem })
                 ]
                 })
@@ -88,6 +87,7 @@ sap.ui.define([
         onCreateTodo: function() {
             const iSelectedListID = this.getView().getModel("state").getProperty("/selectedList");
             const oModel = this.getView().getModel().bindList("/Todo")
+
             oModel.requestContexts().then(function(aContexts) {
                 const aTodos = aContexts.map(oContext => oContext.getObject());
                 
@@ -134,6 +134,24 @@ sap.ui.define([
 
             oTitleControl.setVisible(true);
             oTitleInputControl.setVisible(false);
+        },
+        onEnableEditTodoName: function(oEvent) {
+            const oColumnListItem = oEvent.getSource().getParent();
+            const oNameCell = oColumnListItem.getCells()[1];
+            const oInputNameCell = new Input({ value: "{text}" });
+
+            oInputNameCell.attachSubmit(null, this.onDisableEditTodoName);
+
+            oColumnListItem.removeCell(oNameCell);
+            oColumnListItem.insertCell(oInputNameCell, 1);
+        },
+        onDisableEditTodoName: function(oEvent) {
+            const oColumnListItem = oEvent.getSource().getParent();
+            const oInputNameCell = oColumnListItem.getCells()[1];
+            const oNameCell = new Text({ text: "{text}" });
+
+            oColumnListItem.removeCell(oInputNameCell);
+            oColumnListItem.insertCell(oNameCell, 1);
         },
         onDeleteTodoList: function() {
             const iTodoListId = this.getView().getModel("state").getProperty("/selectedList");
